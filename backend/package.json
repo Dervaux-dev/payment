@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "node ./node_modules/nodemon/bin/nodemon.js --watch src --ext ts --exec \"node ./node_modules/typescript/bin/tsc && node --env-file=.env dist/index.js\"",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
+    "build": "node ./node_modules/typescript/bin/tsc",
+    "start": "node --env-file=.env dist/index.js"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.2",
+    "@types/pg": "^8.15.5",
+    "nodemon": "^3.1.14",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "pg": "^8.23.0",
+    "url": "^0.11.4"
+  }
+}

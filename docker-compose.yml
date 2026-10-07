@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mypayment
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override DB URL to use Docker service name
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/mypayment
+    volumes:
+      # Mount the LND TLS cert from your Windows host into the container
+      - ${LND_CERT_HOST_PATH:-C:/Users/LENOVO/.polar/networks/1/volumes/lnd/alice/tls.cert}:/lnd/tls.cert:ro
+    extra_hosts:
+      # Lets the container reach services on your Windows host (LND, POS)
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
